@@ -3,17 +3,22 @@ package plugin;
 import jp.sbi.celldesigner.plugin.CellDesignerPlugin;
 import jp.sbi.celldesigner.plugin.PluginMenu;
 import jp.sbi.celldesigner.plugin.PluginMenuItem;
-import jp.sbi.celldesigner.plugin.PluginModel;
 import jp.sbi.celldesigner.plugin.PluginSBase;
 
+// TODO: Auto-generated Javadoc
 /**
- * @author Kaito Ii
+ * The Class SpatialSimulatorPlugin.
  *
+ * @author Kaito Ii
+ * 
  * Date Created: Jun 24, 2016
  */
 
 public class SpatialSimulatorPlugin extends CellDesignerPlugin {
 	
+	/**
+	 * Instantiates a new spatial simulator plugin.
+	 */
 	public SpatialSimulatorPlugin(){
 		PluginMenu menu = new PluginMenu(SpatialSimulatorUtil.title);
 		SpatialSimulatorAction action = new SpatialSimulatorAction(this);
@@ -72,11 +77,6 @@ public class SpatialSimulatorPlugin extends CellDesignerPlugin {
 	 */
 	@Override
 	public void modelSelectChanged(PluginSBase sbase) {
-		if(sbase instanceof PluginModel){
-			PluginModel model = (PluginModel) sbase;
-			//TODO determine 
-		}
-		
 	}
 
 }
