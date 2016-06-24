@@ -1,12 +1,17 @@
 package plugin;
+// TODO: Auto-generated Javadoc
+
 /**
- * @author Kaito Ii
+ * The Class SpatialSimulatorUtil.
  *
+ * @author Kaito Ii
+ * 
  * Date Created: Jun 24, 2016
  */
 
 public class SpatialSimulatorUtil {
 
+	/** The Constant title. */
 	public static final String title = "Spatial Simulator";
 	
 }
