@@ -15,9 +15,13 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import org.sbml.libsbml.SBMLDocument;
+
+import plugin.newsample.NotifySelected.MessageDialog;
 import jp.sbi.celldesigner.plugin.PluginModel;
 
 // TODO: Auto-generated Javadoc
@@ -35,6 +39,8 @@ public class SpatialSimulatorDialog extends JFrame implements ActionListener{
 	/** The p model. */
 	private PluginModel pModel; 
 	
+	private SBMLDocument document;
+	
 	/** The default text length. */
 	private final int defaultTextLength = 5;
 	
@@ -42,49 +48,49 @@ public class SpatialSimulatorDialog extends JFrame implements ActionListener{
 	private JLabel xLabel = new JLabel("x Mesh Size");
 	
 	/** The x field. */
-	private JTextField xField = new JTextField(defaultTextLength);
+	private JTextField xField = new JTextField("100", defaultTextLength);
 	
 	/** The y label. */
 	private JLabel yLabel = new JLabel("y Mesh Size");
 	
 	/** The y field. */
-	private JTextField yField = new JTextField(defaultTextLength);
+	private JTextField yField = new JTextField("100", defaultTextLength);
 	
 	/** The z label. */
 	private JLabel zLabel = new JLabel("z Mesh Size");
 	
 	/** The z field. */
-	private JTextField zField = new JTextField(defaultTextLength);
+	private JTextField zField = new JTextField("100", defaultTextLength);
 	
 	/** The t label. */
 	private JLabel tLabel = new JLabel("Time Interval");
 	
 	/** The t field. */
-	private JTextField tField = new JTextField(defaultTextLength);
+	private JTextField tField = new JTextField("1", defaultTextLength);
 	
 	/** The dt label. */
 	private JLabel dtLabel = new JLabel("Step Size");
 	
 	/** The dt field. */
-	private JTextField dtField = new JTextField(defaultTextLength);
+	private JTextField dtField = new JTextField("0.01", defaultTextLength);
 	
 	/** The output label. */
 	private JLabel outputLabel = new JLabel("Output Step Size");
 	
 	/** The output field. */
-	private JTextField outputField = new JTextField(defaultTextLength);
+	private JTextField outputField = new JTextField("10", defaultTextLength);
 	
 	/** The max color label. */
 	private JLabel maxColorLabel = new JLabel("Color Bar Max");
 	
 	/** The max color field. */
-	private JTextField maxColorField = new JTextField(defaultTextLength);
+	private JTextField maxColorField = new JTextField("10", defaultTextLength);
 	
 	/** The min color label. */
 	private JLabel minColorLabel = new JLabel("Color Bar Min");
 	
 	/** The min color field. */
-	private JTextField minColorField = new JTextField(defaultTextLength);
+	private JTextField minColorField = new JTextField("0", defaultTextLength);
 	
 	/** The slice axis. */
 	private final String[] sliceAxis = {"x","y","z"};
@@ -96,7 +102,7 @@ public class SpatialSimulatorDialog extends JFrame implements ActionListener{
 	private JComboBox<String> sliceCombo = new JComboBox<String>(sliceAxis);
 	
 	/** The slice field. */
-	private JTextField sliceField = new JTextField(defaultTextLength);
+	private JTextField sliceField = new JTextField("0",defaultTextLength);
 	
 	/** The clear button. */
 	private JButton clearButton = new JButton("Clear");
@@ -105,7 +111,6 @@ public class SpatialSimulatorDialog extends JFrame implements ActionListener{
 	private JButton runButton = new JButton("Run");
 	
 
-	
 	/**
 	 * Instantiates a new spatial simulator dialog.
 	 */
@@ -201,25 +206,15 @@ public class SpatialSimulatorDialog extends JFrame implements ActionListener{
 		getContentPane().add(panel2,BorderLayout.SOUTH);
 		
 	}
+
+	public SBMLDocument getDocument() {
+		return document;
+	}
+
+	public void setDocument(SBMLDocument document) {
+		this.document = document;
+	}
 	
-	/**
-	 * Gets the p model.
-	 *
-	 * @return the p model
-	 */
-	public PluginModel getpModel() {
-		return pModel;
-	}
-
-	/**
-	 * Sets the p model.
-	 *
-	 * @param pModel the new p model
-	 */
-	public void setpModel(PluginModel pModel) {
-		this.pModel = pModel;
-	}
-
 	/**
 	 * Clear entrys.
 	 */
@@ -232,14 +227,32 @@ public class SpatialSimulatorDialog extends JFrame implements ActionListener{
 		outputField.setText("");
 		minColorField.setText("");
 		maxColorField.setText("");
+		sliceField.setText("");
 	}
 	
 	/**
 	 * Validate arguments.
+	 * @throws Exception 
 	 */
-	public void validateArguments() {
-		
+	public void validateArguments() throws Exception {
+		if(xField.getText().isEmpty() || yField.getText().isEmpty() 
+				|| tField.getText().isEmpty() || dtField.getText().isEmpty()
+				|| outputField.getText().isEmpty() || maxColorField.getText().isEmpty()
+				||minColorField.getText().isEmpty())
+			throw new NullPointerException();
+
 	}
+	
+	private final String xoption = "-x";
+	private final String yoption = "-y";
+	private final String zoption = "-z";
+	private final String toption = "-t";
+	private final String doption = "-d";
+	private final String ooption = "-o";
+	private final String coption = "-c";
+	private final String Coption = "-C";
+	private final String soption = "-s";
+	
 	
 	/**
 	 * Gets the arguments.
@@ -249,8 +262,27 @@ public class SpatialSimulatorDialog extends JFrame implements ActionListener{
 	public String[] getArguments(){
 		List<String> argList = new ArrayList<String>();
 		
+		argList.add(xoption);
+		argList.add(xField.getText());
+		argList.add(yoption);
+		argList.add(yField.getText());
+		argList.add(zoption);
+		argList.add(zField.getText());
+		argList.add(toption);
+		argList.add(tField.getText());
+		argList.add(doption);
+		argList.add(dtField.getText());
+		argList.add(ooption);
+		argList.add(outputField.getText());
+		argList.add(coption);
+		argList.add(maxColorField.getText());
+		argList.add(Coption);	
+		argList.add(minColorField.getText());
+		argList.add(soption);	
+		argList.add(sliceField.getText());
 		
-		return (String[]) argList.toArray();
+		
+		return argList.toArray(new String[argList.size()]);
 	}
 	
 	/* (non-Javadoc)
@@ -259,12 +291,21 @@ public class SpatialSimulatorDialog extends JFrame implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		JButton button = (JButton) e.getSource();
+		
 		if(button.getActionCommand().equals("Clear")){
 			clearEntrys();
 		} else {
-				validateArguments();
+				try {
+					validateArguments();
+				} catch (NullPointerException e1) {
+					JOptionPane.showMessageDialog(null, "Missing argument");
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} 
 				SpatialSimulator simulator = SpatialSimulator.getInstance();
-				//simulator.simulate();
+				String[] args = getArguments();
+				simulator.simulate(document, args.length, args);
 		}
 		
 	}
@@ -278,5 +319,7 @@ public class SpatialSimulatorDialog extends JFrame implements ActionListener{
 		SpatialSimulatorDialog ssd = new SpatialSimulatorDialog();
 		ssd.setVisible(true);
 	}
+
+
 
 }

@@ -3,6 +3,7 @@ package plugin;
 import java.awt.event.ActionEvent;
 
 import jp.sbi.celldesigner.plugin.PluginAction;
+import jp.sbi.celldesigner.plugin.PluginModel;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -29,7 +30,6 @@ public class SpatialSimulatorAction extends PluginAction{
 	 */
 	public SpatialSimulatorAction(SpatialSimulatorPlugin plugin) {
 		this.plugin = plugin;
-		this.simulatorDialog = new SpatialSimulatorDialog();
 	}
 	
 	/* (non-Javadoc)
@@ -38,7 +38,8 @@ public class SpatialSimulatorAction extends PluginAction{
 	@Override
 	public void myActionPerformed(ActionEvent arg0) {
 		plugin.setStarted(true);
-		simulatorDialog.setpModel(plugin.getSelectedModel());
+		PluginModel pModel = plugin.getSelectedModel();
+		//simulatorDialog.setDocument(document);
 		simulatorDialog.setVisible(true);
 	}
 
