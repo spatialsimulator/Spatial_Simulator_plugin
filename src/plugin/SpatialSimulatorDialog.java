@@ -1,5 +1,6 @@
 package plugin;
 
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -20,9 +21,9 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import org.sbml.libsbml.SBMLDocument;
+import org.sbml.libsbml.SpatialModelPlugin;
+import org.sbml.libsbml.libsbml;
 
-import plugin.newsample.NotifySelected.MessageDialog;
-import jp.sbi.celldesigner.plugin.PluginModel;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -35,10 +36,51 @@ import jp.sbi.celldesigner.plugin.PluginModel;
 
 @SuppressWarnings("serial")
 public class SpatialSimulatorDialog extends JFrame implements ActionListener{
-
-	/** The p model. */
-	private PluginModel pModel; 
 	
+	static {
+		String varname;
+		String shlibname;
+
+		if (System.getProperty("os.name").startsWith("Mac OS")) {
+			varname = "DYLD_LIBRARY_PATH"; // We're on a Mac.
+			shlibname = "'libsbmlj.jnilib'";
+		} else {
+			varname = "LD_LIBRARY_PATH"; // We're not on a Mac.
+			shlibname = "'libsbmlj.so' and/or 'libsbml.so'";
+		}
+
+		try {
+			System.loadLibrary("sbmlj");
+			// For extra safety, check that the jar file is in the classpath.
+			Class.forName("org.sbml.libsbml.libsbml");
+		} catch (UnsatisfiedLinkError e) {
+			System.err.println("Error encountered while attempting to load libSBML:");
+			System.err.println("Please check the value of your " + varname
+					+ " environment variable and/or"
+					+ " your 'java.library.path' system property"
+					+ " (depending on which one you are using) to"
+					+ " make sure it list the directories needed to"
+					+ " find the " + shlibname + " library file and the"
+					+ " libraries it depends upon (e.g., the XML parser).");
+			System.exit(1);
+		} catch (ClassNotFoundException e) {
+			System.err.println("Error: unable to load the file 'libsbmlj.jar'."
+					+ " It is likely that your -classpath command line "
+					+ " setting or your CLASSPATH environment variable "
+					+ " do not include the file 'libsbmlj.jar'.");
+			e.printStackTrace();
+
+			System.exit(1);
+		} catch (SecurityException e) {
+			System.err.println("Error encountered while attempting to load libSBML:");
+			e.printStackTrace();
+			System.err.println("Could not load the libSBML library files due to a"
+					+ " security exception.\n");
+			System.exit(1);
+		}
+	}
+	
+	/** The document. */
 	private SBMLDocument document;
 	
 	/** The default text length. */
@@ -109,8 +151,35 @@ public class SpatialSimulatorDialog extends JFrame implements ActionListener{
 	
 	/** The run button. */
 	private JButton runButton = new JButton("Run");
+		
+	/** The xoption. */
+	private final String xoption = "-x";
 	
-
+	/** The yoption. */
+	private final String yoption = "-y";
+	
+	/** The zoption. */
+	private final String zoption = "-z";
+	
+	/** The toption. */
+	private final String toption = "-t";
+	
+	/** The doption. */
+	private final String doption = "-d";
+	
+	/** The ooption. */
+	private final String ooption = "-o";
+	
+	/** The coption. */
+	private final String coption = "-c";
+	
+	/** The Coption. */
+	private final String Coption = "-C";
+	
+	/** The soption. */
+	private final String soption = "-s";
+	
+	
 	/**
 	 * Instantiates a new spatial simulator dialog.
 	 */
@@ -177,6 +246,7 @@ public class SpatialSimulatorDialog extends JFrame implements ActionListener{
 		JPanel panels = new JPanel();
 		panels.setLayout(new FlowLayout());
 		panels.add(sliceLabel);
+		sliceCombo.setSelectedItem(sliceAxis[2]);
 		panels.add(sliceCombo);
 		panels.add(sliceField);
 		
@@ -192,9 +262,9 @@ public class SpatialSimulatorDialog extends JFrame implements ActionListener{
 		hgroup.addGroup(layout.createParallelGroup().addComponent(panelt));
 		hgroup.addGroup(layout.createParallelGroup().addComponent(paneldt));
 		hgroup.addGroup(layout.createParallelGroup().addComponent(panelo));
+		hgroup.addGroup(layout.createParallelGroup().addComponent(panels));
 		hgroup.addGroup(layout.createParallelGroup().addComponent(panelc));
 		hgroup.addGroup(layout.createParallelGroup().addComponent(panelC));
-		hgroup.addGroup(layout.createParallelGroup().addComponent(panels));
 		
 		JPanel panel2 = new JPanel();
 		panel2.setLayout(new FlowLayout());
@@ -206,11 +276,26 @@ public class SpatialSimulatorDialog extends JFrame implements ActionListener{
 		getContentPane().add(panel2,BorderLayout.SOUTH);
 		
 	}
-
+	
+	public SpatialSimulatorDialog(SBMLDocument document){
+		this();
+		this.document = document;
+	}
+	
+	/**
+	 * Gets the document.
+	 *
+	 * @return the document
+	 */
 	public SBMLDocument getDocument() {
 		return document;
 	}
 
+	/**
+	 * Sets the document.
+	 *
+	 * @param document the new document
+	 */
 	public void setDocument(SBMLDocument document) {
 		this.document = document;
 	}
@@ -232,27 +317,26 @@ public class SpatialSimulatorDialog extends JFrame implements ActionListener{
 	
 	/**
 	 * Validate arguments.
-	 * @throws Exception 
+	 *
+	 * @throws Exception the exception
 	 */
 	public void validateArguments() throws Exception {
 		if(xField.getText().isEmpty() || yField.getText().isEmpty() 
 				|| tField.getText().isEmpty() || dtField.getText().isEmpty()
 				|| outputField.getText().isEmpty() || maxColorField.getText().isEmpty()
-				||minColorField.getText().isEmpty())
+				|| minColorField.getText().isEmpty())
 			throw new NullPointerException();
-
+		
+		// check slice index
+		
+		if(sliceCombo.getSelectedItem().equals("x") && Integer.parseInt(sliceField.getText()) > Integer.parseInt(xField.getText()))
+						throw new IllegalArgumentException();
+		else if(sliceCombo.getSelectedItem().equals("y") && Integer.parseInt(sliceField.getText()) > Integer.parseInt(yField.getText()))
+			throw new IllegalArgumentException();
+		else if(sliceCombo.getSelectedItem().equals("z") && Integer.parseInt(sliceField.getText()) > Integer.parseInt(zField.getText()))
+			throw new IllegalArgumentException();
+		
 	}
-	
-	private final String xoption = "-x";
-	private final String yoption = "-y";
-	private final String zoption = "-z";
-	private final String toption = "-t";
-	private final String doption = "-d";
-	private final String ooption = "-o";
-	private final String coption = "-c";
-	private final String Coption = "-C";
-	private final String soption = "-s";
-	
 	
 	/**
 	 * Gets the arguments.
@@ -278,11 +362,22 @@ public class SpatialSimulatorDialog extends JFrame implements ActionListener{
 		argList.add(maxColorField.getText());
 		argList.add(Coption);	
 		argList.add(minColorField.getText());
-		argList.add(soption);	
-		argList.add(sliceField.getText());
+		if(isModel3d())
+			argList.add(soption);
+			argList.add((String) sliceCombo.getSelectedItem()+sliceField.getText());
 		
 		
 		return argList.toArray(new String[argList.size()]);
+	}
+	
+	private boolean isModel3d(){
+		SpatialModelPlugin spatialplugin = (SpatialModelPlugin) document.getModel().getPlugin("spatial");
+		long size = spatialplugin.getGeometry().getListOfCoordinateComponents().size();
+		
+		if(size == 3)
+			return true;
+		else
+			return false;
 	}
 	
 	/* (non-Javadoc)
@@ -299,9 +394,10 @@ public class SpatialSimulatorDialog extends JFrame implements ActionListener{
 					validateArguments();
 				} catch (NullPointerException e1) {
 					JOptionPane.showMessageDialog(null, "Missing argument");
+					return;
 				} catch (Exception e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
+					return;
 				} 
 				SpatialSimulator simulator = SpatialSimulator.getInstance();
 				String[] args = getArguments();
@@ -317,6 +413,8 @@ public class SpatialSimulatorDialog extends JFrame implements ActionListener{
 	 */
 	public static void main(String[] args){
 		SpatialSimulatorDialog ssd = new SpatialSimulatorDialog();
+		SBMLDocument document = libsbml.readSBML("sample/mem_diff.xml");
+		ssd.setDocument(document);
 		ssd.setVisible(true);
 	}
 

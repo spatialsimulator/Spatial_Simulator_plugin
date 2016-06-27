@@ -2,6 +2,9 @@ package plugin;
 
 import java.awt.event.ActionEvent;
 
+import org.sbml.libsbml.SBMLDocument;
+import org.sbml.libsbml.libsbml;
+
 import jp.sbi.celldesigner.plugin.PluginAction;
 import jp.sbi.celldesigner.plugin.PluginModel;
 
@@ -39,7 +42,8 @@ public class SpatialSimulatorAction extends PluginAction{
 	public void myActionPerformed(ActionEvent arg0) {
 		plugin.setStarted(true);
 		PluginModel pModel = plugin.getSelectedModel();
-		//simulatorDialog.setDocument(document);
+		SBMLDocument document = libsbml.readSBMLFromString(pModel.getPureSBMLString());
+		simulatorDialog.setDocument(document);
 		simulatorDialog.setVisible(true);
 	}
 
