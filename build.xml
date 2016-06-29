@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- WARNING: Eclipse auto-generated file.
+              Any modifications will be overwritten.
+              To include a user specific buildfile here, simply create one in the same
+              directory with the processing instruction <?eclipse.ant.import?>
+              as the first entry and export the buildfile again. --><project basedir="." default="build" name="SpatialSimulatorPlugin">
+    <property environment="env"/>
+    <property name="ECLIPSE_HOME" value="../../../../../Applications/eclipse/"/>
+    <property name="Jsbml.location" value="../Jsbml"/>
+    <property name="debuglevel" value="source,lines,vars"/>
+    <property name="target" value="1.7"/>
+    <property name="source" value="1.7"/>
+    <path id="Jsbml.classpath">
+        <pathelement location="${Jsbml.location}/trunk/core/lib/biojava3-ontology-3.1.0.jar"/>
+        <pathelement location="${Jsbml.location}/trunk/core/lib/jigsaw-dateParser.jar"/>
+        <pathelement location="${Jsbml.location}/trunk/core/lib/junit-4.8.jar"/>
+        <pathelement location="${Jsbml.location}/trunk/core/lib/log4j-1.2.17.jar"/>
+        <pathelement location="${Jsbml.location}/trunk/core/lib/spi-full-0.2.4.jar"/>
+        <pathelement location="${Jsbml.location}/trunk/core/lib/stax-api-1.0.1.jar"/>
+        <pathelement location="${Jsbml.location}/trunk/core/lib/stax2-api-3.0.3.jar"/>
+        <pathelement location="${Jsbml.location}/trunk/core/lib/staxmate-2.0.0.jar"/>
+        <pathelement location="${Jsbml.location}/trunk/core/lib/woodstox-core-lgpl-4.0.9.jar"/>
+        <pathelement location="${Jsbml.location}/trunk/core/lib/xstream-1.3.1.jar"/>
+        <pathelement location="${Jsbml.location}/trunk/modules/celldesigner/lib/celldesigner-4.4-GSoC.jar"/>
+        <pathelement location="${Jsbml.location}/trunk/modules/celldesigner/lib/sbmlj.jar"/>
+        <pathelement location="${Jsbml.location}/bin"/>
+    </path>
+    <path id="SpatialSimulatorPlugin.classpath">
+        <pathelement location="bin"/>
+        <pathelement location="lib/libsbmlj.jar"/>
+        <pathelement location="lib/celldesigner.jar"/>
+        <pathelement location="lib/jna-4.2.2.jar"/>
+        <path refid="Jsbml.classpath"/>
+    </path>
+    <target name="init">
+        <mkdir dir="bin"/>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="src">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="clean">
+        <delete dir="bin"/>
+    </target>
+    <target depends="clean" name="cleanall">
+        <ant antfile="build.xml" dir="${Jsbml.location}" inheritAll="false" target="clean"/>
+    </target>
+    <target depends="build-subprojects,build-project" name="build"/>
+    <target name="build-subprojects">
+        <ant antfile="build.xml" dir="${Jsbml.location}" inheritAll="false" target="build-project">
+            <propertyset>
+                <propertyref name="build.compiler"/>
+            </propertyset>
+        </ant>
+    </target>
+    <target depends="init" name="build-project">
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
+            <src path="src"/>
+            <classpath refid="SpatialSimulatorPlugin.classpath"/>
+        </javac>
+    </target>
+    <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
+    <target description="copy Eclipse compiler jars to ant lib directory" name="init-eclipse-compiler">
+        <copy todir="${ant.library.dir}">
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </copy>
+        <unzip dest="${ant.library.dir}">
+            <patternset includes="jdtCompilerAdapter.jar"/>
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </unzip>
+    </target>
+    <target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
+        <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
+        <antcall target="build"/>
+    </target>
+    <target name="SpatialSimulatorDialog">
+        <java classname="jp.sbi.celldesigner.ext.plugins.spatialsimulator.SpatialSimulatorDialog" failonerror="true" fork="yes">
+            <classpath refid="SpatialSimulatorPlugin.classpath"/>
+        </java>
+    </target>
+</project>

@@ -1,4 +1,4 @@
-package plugin;
+package jp.sbi.celldesigner.ext.plugins.spatialsimulator;
 
 import java.awt.event.ActionEvent;
 
