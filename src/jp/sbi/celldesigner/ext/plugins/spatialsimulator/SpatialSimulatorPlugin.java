@@ -1,4 +1,4 @@
-package plugin;
+package jp.sbi.celldesigner.ext.plugins.spatialsimulator;
 
 import jp.sbi.celldesigner.plugin.CellDesignerPlugin;
 import jp.sbi.celldesigner.plugin.PluginMenu;

@@ -1,4 +1,4 @@
-package plugin;
+package jp.sbi.celldesigner.ext.plugins.spatialsimulator;
 
 
 import java.awt.BorderLayout;
@@ -366,7 +366,8 @@ public class SpatialSimulatorDialog extends JFrame implements ActionListener{
 			argList.add(soption);
 			argList.add((String) sliceCombo.getSelectedItem()+sliceField.getText());
 		
-		
+		//argList.add()
+			
 		return argList.toArray(new String[argList.size()]);
 	}
 	
@@ -399,7 +400,7 @@ public class SpatialSimulatorDialog extends JFrame implements ActionListener{
 					e1.printStackTrace();
 					return;
 				} 
-				SpatialSimulator simulator = SpatialSimulator.getInstance();
+				SpatialSimulatorHandler simulator = SpatialSimulatorHandler.getInstance();
 				String[] args = getArguments();
 				simulator.simulate(document, args.length, args);
 		}
