@@ -1,6 +1,10 @@
 sample/
 .DS_Store
+jsbml.log
 
 .classpath
 .project
 .settings/
+bin/
+target/
+
