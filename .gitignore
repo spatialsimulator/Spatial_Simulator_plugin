@@ -1,6 +1,6 @@
 sample/
 .DS_Store
-jsbml.log
+*.log
 
 .classpath
 .project

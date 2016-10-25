@@ -14,12 +14,12 @@
           <target>1.6</target>
         </configuration>
       </plugin>
-       <plugin>
+      <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
         <configuration>
           <archive>
             <manifest>
-              <mainClass>plugin.spatialsimulator.SpatialSimulatorDialog</mainClass>
+              <mainClass></mainClass>
             </manifest>
           </archive>
           <descriptorRefs>
@@ -38,7 +38,7 @@
       </plugin>
     </plugins>
   </build>
-    <repositories>
+  <repositories>
     <repository>
       <id>ebi-repo</id>
       <name>The EBI repository</name>
@@ -46,35 +46,37 @@
       <releases><enabled>true</enabled></releases>
     </repository>
   </repositories>
-  <dependencies>
-  	<dependency>
-  		<groupId>org.sbml.jsbml</groupId>
-  		<artifactId>jsbml</artifactId>
-  	</dependency>
-  	<dependency>
-  		<groupId>net.java.dev.jna</groupId>
-  		<artifactId>jna</artifactId>
-  		<version>4.2.2</version>
-  	</dependency>
-  </dependencies>
   <properties>
-  	<downloadSources>true</downloadSources>
-  	<downloadJavadocs>true</downloadJavadocs>
+    <downloadSources>true</downloadSources>
+    <downloadJavadocs>true</downloadJavadocs>
   </properties>
-  <dependencyManagement>
-  	<dependencies>
-  		<dependency>
-  			<groupId>org.sbml.jsbml</groupId>
-        <artifactId>jsbml</artifactId>
-        <version>1.1</version>
-      </dependency>
-      <dependency>
-        <groupId>org.group.project</groupId>
-        <artifactId>Project</artifactId>
-        <version>1.0.0</version>
-        <scope>system</scope>
-        <systemPath>${basedir}/lib/celldesigner.jar</systemPath>
-      </dependency>
-  	</dependencies>
-  </dependencyManagement>
+  <dependencies>
+    <dependency>
+      <groupId>net.java.dev.jna</groupId>
+      <artifactId>jna</artifactId>
+      <version>4.2.2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.sbml.jsbml</groupId>
+      <artifactId>jsbml</artifactId>
+      <version>1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>celldesigner</groupId>
+      <artifactId>celldesigner</artifactId>
+      <version>1.0.0</version>
+      <scope>system</scope>
+      <systemPath>${basedir}/lib/celldesigner.jar</systemPath>
+    </dependency>
+    <dependency>
+    	<groupId>com.nativelibs4java</groupId>
+    	<artifactId>jnaerator-runtime</artifactId>
+    	<version>0.12</version>
+    </dependency>
+    <dependency>
+    	<groupId>net.java.dev.jna</groupId>
+    	<artifactId>jna-platform</artifactId>
+    	<version>4.2.2</version>
+    </dependency>
+  </dependencies>
 </project>

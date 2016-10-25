@@ -4,12 +4,15 @@ import java.awt.event.ActionEvent;
 
 import javax.xml.stream.XMLStreamException;
 
-import org.sbml.jsbml.JSBML;
-import org.sbml.jsbml.SBMLDocument;
-
+import jp.sbi.celldesigner.MessageDialog;
 import jp.sbi.celldesigner.plugin.PluginAction;
 import jp.sbi.celldesigner.plugin.PluginModel;
 
+import org.sbml.jsbml.JSBML;
+import org.sbml.jsbml.SBMLDocument;
+import org.sbml.jsbml.SBMLException;
+
+// TODO: Auto-generated Javadoc
 /**
  * The Class SpatialSimulatorAction.
  *
@@ -19,9 +22,8 @@ import jp.sbi.celldesigner.plugin.PluginModel;
  */
 
 public class SpatialSimulatorAction extends PluginAction{
-	/**
-	 * 
-	 */
+	
+	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = -2321778927487000209L;
 
 	/** The plugin. */
@@ -52,10 +54,13 @@ public class SpatialSimulatorAction extends PluginAction{
 			simulatorDialog = new SpatialSimulatorDialog(document);
 			simulatorDialog.pack();
 			simulatorDialog.toFront();
-			simulatorDialog.setAlwaysOnTop(true);
+		//	simulatorDialog.setAlwaysOnTop(true);
 			simulatorDialog.setVisible(true);
 		} catch (XMLStreamException e) {
-			System.err.println("Could not create SBML document from plugin model");
+			MessageDialog.showMessageDialog(null, "Error", "Error","Could not create SBML document from plugin model");
+			e.printStackTrace();
+		} catch(SBMLException e){
+			MessageDialog.showMessageDialog(null, "Error", "Error", "SBMLDocument missing Spatial attributes");
 			e.printStackTrace();
 		}
 		
