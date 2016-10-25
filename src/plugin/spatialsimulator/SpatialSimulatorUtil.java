@@ -15,5 +15,6 @@ public class SpatialSimulatorUtil {
 	public static final String title = "Spatial Simulator";
 	
 	
+	/** The Constant simulatorName. */
 	public static final String simulatorName = "";
 }

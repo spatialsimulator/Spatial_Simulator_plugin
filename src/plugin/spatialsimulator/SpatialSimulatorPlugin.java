@@ -15,6 +15,7 @@ import jp.sbi.celldesigner.plugin.PluginSBase;
 
 public class SpatialSimulatorPlugin extends CellDesignerPlugin {
 	
+	/** The item. */
 	PluginMenuItem item;
 	
 	/**

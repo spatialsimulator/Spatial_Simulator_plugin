@@ -11,8 +11,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -25,6 +23,11 @@ import javax.xml.stream.XMLStreamException;
 
 import org.sbml.jsbml.JSBML;
 import org.sbml.jsbml.SBMLDocument;
+import org.sbml.jsbml.SBMLException;
+import org.sbml.jsbml.ext.spatial.SpatialConstants;
+import org.sbml.jsbml.ext.spatial.SpatialModelPlugin;
+
+import plugin.spatialsimulator.SpatialSimulatorHandler.SpatialSimulator.optionList;
 
 
 // TODO: Auto-generated Javadoc
@@ -38,9 +41,8 @@ import org.sbml.jsbml.SBMLDocument;
 
 
 public class SpatialSimulatorDialog extends JFrame implements ActionListener{
-	/**
-	 * 
-	 */
+	
+	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = -2276253283810399783L;
 	
 	/** The document. */
@@ -114,34 +116,6 @@ public class SpatialSimulatorDialog extends JFrame implements ActionListener{
 	
 	/** The run button. */
 	private JButton runButton = new JButton("Run");
-		
-	/** The xoption. */
-	private final String xoption = "-x";
-	
-	/** The yoption. */
-	private final String yoption = "-y";
-	
-	/** The zoption. */
-	private final String zoption = "-z";
-	
-	/** The toption. */
-	private final String toption = "-t";
-	
-	/** The doption. */
-	private final String doption = "-d";
-	
-	/** The ooption. */
-	private final String ooption = "-o";
-	
-	/** The coption. */
-	private final String coption = "-c";
-	
-	/** The Coption. */
-	private final String Coption = "-C";
-	
-	/** The soption. */
-	private final String soption = "-s";
-	
 	
 	/**
 	 * Instantiates a new spatial simulator dialog.
@@ -267,9 +241,18 @@ public class SpatialSimulatorDialog extends JFrame implements ActionListener{
 		
 	}
 	
-	public SpatialSimulatorDialog(SBMLDocument document){
+	/**
+	 * Instantiates a new spatial simulator dialog.
+	 *
+	 * @param document the document
+	 * @throws SBMLException the SBML exception
+	 */
+	public SpatialSimulatorDialog(SBMLDocument document) throws SBMLException{
 		this();
 		this.document = document;
+//		if(!document.getPackageRequired(SpatialConstants.namespaceURI))
+//			throw new SBMLException();
+		// TODO fill default mesh size with boundary size / image size
 	}
 	
 	/**
@@ -308,24 +291,23 @@ public class SpatialSimulatorDialog extends JFrame implements ActionListener{
 	/**
 	 * Validate arguments.
 	 *
-	 * @throws Exception the exception
+	 * @return true, if is valid arguments
 	 */
-	public void validateArguments() throws Exception {
+	public boolean isValidArguments() {
 		if(xField.getText().isEmpty() || yField.getText().isEmpty() 
 				|| tField.getText().isEmpty() || dtField.getText().isEmpty()
 				|| outputField.getText().isEmpty() || maxColorField.getText().isEmpty()
 				|| minColorField.getText().isEmpty())
-			throw new NullPointerException();
-		
-		// check slice index
-		
+			return false;
+			
 		if(sliceCombo.getSelectedItem().equals("x") && Integer.parseInt(sliceField.getText()) > Integer.parseInt(xField.getText()))
-						throw new IllegalArgumentException();
+			return false;
 		else if(sliceCombo.getSelectedItem().equals("y") && Integer.parseInt(sliceField.getText()) > Integer.parseInt(yField.getText()))
-			throw new IllegalArgumentException();
+			return false;
 		else if(sliceCombo.getSelectedItem().equals("z") && Integer.parseInt(sliceField.getText()) > Integer.parseInt(zField.getText()))
-			throw new IllegalArgumentException();
+			return false;
 		
+		return true;
 	}
 	
 	/**
@@ -333,68 +315,71 @@ public class SpatialSimulatorDialog extends JFrame implements ActionListener{
 	 *
 	 * @return the arguments
 	 */
-	public String[] getArguments(){
-		List<String> argList = new ArrayList<String>();
+	public optionList getArguments(){
+		optionList options = new optionList();
 		
-		argList.add(xoption);
-		argList.add(xField.getText());
-		argList.add(yoption);
-		argList.add(yField.getText());
-		argList.add(zoption);
-		argList.add(zField.getText());
-		argList.add(toption);
-		argList.add(tField.getText());
-		argList.add(doption);
-		argList.add(dtField.getText());
-		argList.add(ooption);
-		argList.add(outputField.getText());
-		argList.add(coption);
-		argList.add(maxColorField.getText());
-		argList.add(Coption);	
-		argList.add(minColorField.getText());
-		if(isModel3d())
-			argList.add(soption);
-			argList.add((String) sliceCombo.getSelectedItem()+sliceField.getText());
-		
-		//argList.add()
+		options.Xdiv = Integer.parseInt(xField.getText());
+		options.Ydiv = Integer.parseInt(yField.getText());
+		options.Zdiv = Integer.parseInt(zField.getText());
+		options.end_time = Double.parseDouble(tField.getText());
+		options.dt = Double.parseDouble(dtField.getText());
+		options.out_step = Integer.parseInt(outputField.getText());
+		options.range_max = Double.parseDouble(maxColorField.getText());
+		options.range_min = Double.parseDouble(minColorField.getText());
+
+//		if(isModel3d()){
+//			options.slicedim = ((String) sliceCombo.getSelectedItem()).getBytes()[0];
+//			options.slice = Integer.parseInt(sliceField.getText());
+//			options.sliceFlag = true;
+//		}
 			
-		return argList.toArray(new String[argList.size()]);
+		return options;
 	}
 	
+	/**
+	 * Checks if is model 3 d.
+	 *
+	 * @return true, if is model 3 d
+	 */
 	private boolean isModel3d(){
-//		SpatialModelPlugin spatialplugin = (SpatialModelPlugin) document.getModel().getPlugin("spatial");
-//		long size = spatialplugin.getGeometry().getListOfCoordinateComponents().size();
+		SpatialModelPlugin spatialplugin = (SpatialModelPlugin) document.getModel().getPlugin(SpatialConstants.namespaceURI);
+		long size = spatialplugin.getGeometry().getListOfCoordinateComponents().size();
 		
-//		if(size == 3)
+		if(size == 3)
 			return true;
-//		else
-//			return false;
+		else
+			return false;
 	}
 	
-	/* (non-Javadoc)
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		JButton button = (JButton) e.getSource();
-		
-		if(button.getActionCommand().equals("Clear")){
+
+		if (button.getActionCommand().equals("Clear")) {
 			clearEntrys();
 		} else {
-				try {
-					validateArguments();
-				} catch (NullPointerException e1) {
-					JOptionPane.showMessageDialog(null, "Missing argument");
-					return;
-				} catch (Exception e1) {
-					e1.printStackTrace();
-					return;
-				} 
-				SpatialSimulatorHandler simulator = SpatialSimulatorHandler.getInstance();
-				String[] args = getArguments();
-				simulator.simulate(document, args.length, args);
+
+			if (!isValidArguments()) {
+				JOptionPane.showMessageDialog(null, "Missing argument");
+				return;
+			}
+			
+			SpatialSimulatorHandler simulator = SpatialSimulatorHandler.getInstance();
+			optionList options = getArguments();
+
+			try {
+				simulator.simulate(document, options);
+			} catch (Exception ex) {
+				JOptionPane.showMessageDialog(null, "Unable to write SBML document");
+			}
 		}
-		
+
 	}
 	
 	/**
@@ -406,7 +391,10 @@ public class SpatialSimulatorDialog extends JFrame implements ActionListener{
 		SpatialSimulatorDialog ssd = new SpatialSimulatorDialog();
 		SBMLDocument document;
 		try {
-			document = JSBML.readSBML("sample/mem_diff.xml");
+			//document = JSBML.readSBML("sample/mem_diff.xml");
+			document = JSBML.readSBML("sample/hogehoge.xml");
+			System.setProperty("jna.debug_load", "true");
+			//System.setProperty("java.library.path", "/usr/local/lib/");
 			ssd.setDocument(document);
 			ssd.setVisible(true);
 		} catch (XMLStreamException e) {
@@ -418,7 +406,5 @@ public class SpatialSimulatorDialog extends JFrame implements ActionListener{
 		}
 		
 	}
-
-
 
 }
