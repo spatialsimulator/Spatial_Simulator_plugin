@@ -106,7 +106,7 @@ public class SpatialSimulatorDialog extends JFrame implements ActionListener{
 	private JLabel sliceLabel = new JLabel("Slice");
 	
 	/** The slice combo. */
-	private JComboBox sliceCombo = new JComboBox(sliceAxis);
+	private JComboBox<String> sliceCombo = new JComboBox<String>(sliceAxis);
 	
 	/** The slice field. */
 	private JTextField sliceField = new JTextField("0",defaultTextLength);
@@ -249,10 +249,9 @@ public class SpatialSimulatorDialog extends JFrame implements ActionListener{
 	 */
 	public SpatialSimulatorDialog(SBMLDocument document) throws SBMLException{
 		this();
-		this.document = document;
-//		if(!document.getPackageRequired(SpatialConstants.namespaceURI))
-//			throw new SBMLException();
-		// TODO fill default mesh size with boundary size / image size
+		setDocument(document);
+		if(!document.getPackageRequired(SpatialConstants.namespaceURI))
+			throw new SBMLException();
 	}
 	
 	/**
@@ -271,6 +270,13 @@ public class SpatialSimulatorDialog extends JFrame implements ActionListener{
 	 */
 	public void setDocument(SBMLDocument document) {
 		this.document = document;
+		if(!isModel3d()){
+			zField.setText("0");
+			zField.setEditable(false);
+			sliceField.setText("0");
+			sliceField.setEditable(false);
+			sliceCombo.setEnabled(false);
+		}
 	}
 	
 	/**
@@ -286,6 +292,7 @@ public class SpatialSimulatorDialog extends JFrame implements ActionListener{
 		minColorField.setText("");
 		maxColorField.setText("");
 		sliceField.setText("");
+		sliceCombo.setSelectedIndex(0);
 	}
 	
 	/**
@@ -327,11 +334,11 @@ public class SpatialSimulatorDialog extends JFrame implements ActionListener{
 		options.range_max = Double.parseDouble(maxColorField.getText());
 		options.range_min = Double.parseDouble(minColorField.getText());
 
-//		if(isModel3d()){
-//			options.slicedim = ((String) sliceCombo.getSelectedItem()).getBytes()[0];
-//			options.slice = Integer.parseInt(sliceField.getText());
-//			options.sliceFlag = true;
-//		}
+		if(isModel3d()){
+			options.slicedim = ((String) sliceCombo.getSelectedItem()).getBytes()[0];
+			options.slice = Integer.parseInt(sliceField.getText());
+			options.sliceFlag = true;
+		}
 			
 		return options;
 	}
@@ -344,7 +351,7 @@ public class SpatialSimulatorDialog extends JFrame implements ActionListener{
 	private boolean isModel3d(){
 		SpatialModelPlugin spatialplugin = (SpatialModelPlugin) document.getModel().getPlugin(SpatialConstants.namespaceURI);
 		long size = spatialplugin.getGeometry().getListOfCoordinateComponents().size();
-		
+			
 		if(size == 3)
 			return true;
 		else
@@ -377,6 +384,7 @@ public class SpatialSimulatorDialog extends JFrame implements ActionListener{
 				simulator.simulate(document, options);
 			} catch (Exception ex) {
 				JOptionPane.showMessageDialog(null, "Unable to write SBML document");
+				return;
 			}
 		}
 
@@ -391,10 +399,8 @@ public class SpatialSimulatorDialog extends JFrame implements ActionListener{
 		SpatialSimulatorDialog ssd = new SpatialSimulatorDialog();
 		SBMLDocument document;
 		try {
-			//document = JSBML.readSBML("sample/mem_diff.xml");
-			document = JSBML.readSBML("sample/hogehoge.xml");
+			document = JSBML.readSBML("sample/alt.xml");
 			System.setProperty("jna.debug_load", "true");
-			//System.setProperty("java.library.path", "/usr/local/lib/");
 			ssd.setDocument(document);
 			ssd.setVisible(true);
 		} catch (XMLStreamException e) {
