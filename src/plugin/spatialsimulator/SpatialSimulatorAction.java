@@ -21,7 +21,7 @@ import org.sbml.jsbml.SBMLException;
  * Date Created: Jun 24, 2016
  */
 
-public class SpatialSimulatorAction extends PluginAction{
+public class SpatialSimulatorAction extends PluginAction {
 	
 	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = -2321778927487000209L;

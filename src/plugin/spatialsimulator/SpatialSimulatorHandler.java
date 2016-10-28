@@ -1,20 +1,13 @@
 package plugin.spatialsimulator;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.util.Arrays;
 import java.util.List;
 
 import javax.xml.stream.XMLStreamException;
 
-import jp.co.mki.celldesigner.simulation.util.SimulationProperties;
-import jp.sbi.celldesigner.SBMLFiler;
-
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBMLException;
-import org.sbml.jsbml.SBMLReader;
 import org.sbml.jsbml.SBMLWriter;
 
 import plugin.spatialsimulator.SpatialSimulatorHandler.SpatialSimulator.optionList;
@@ -42,8 +35,11 @@ public class SpatialSimulatorHandler {
 	/** The document. */
 	private SBMLDocument document;	
 	
+	/**
+	 * Instantiates a new spatial simulator handler.
+	 */
 	private SpatialSimulatorHandler(){
-		System.setProperty("jna.library.path", "lib/darwin/");
+		
 	}
 	
 	/**
@@ -89,44 +85,11 @@ public class SpatialSimulatorHandler {
 	 */
 	public void simulate(SBMLDocument document, optionList options) throws SBMLException, IOException, XMLStreamException {
 		this.document = document;
-		
-//		String sbml_file = SimulationProperties.simDirPath 
-//				+ System.getProperty("file.separator") + "input"  
-//				+ System.getProperty("file.separator") + "spatialsimulator_input.xml";
-
-		String sbml_file = System.getProperty("user.dir") + "/sample/hogehoge.xml";
-	//	writeXML(new File(sbml_file));
-		options.fname = sbml_file;
-	
+		options.fname = document.getModel().getId();
+		options.docFlag = true;
+		options.document = new SBMLWriter().writeSBMLToString(document);
 		SpatialSimulator spatialsim = SpatialSimulator.INSTANCE;
-		//spatialsim.getClass();
-		System.out.println(options.toString());
 		spatialsim.spatialSimulator(options);
-		System.out.println("hgoehoge");
-	}
-
-	/**
-	 * Write XML.
-	 *
-	 * @param resultFileName the result file name
-	 * @throws SBMLException the SBML exception
-	 * @throws IOException Signals that an I/O exception has occurred.
-	 * @throws XMLStreamException the XML stream exception
-	 */
-	private void writeXML(File resultFileName) throws SBMLException, IOException, XMLStreamException {
-			// 日本語ファイル名対応
-			if (!SBMLFiler.isAllowedFileName(resultFileName.getAbsolutePath())) {
-			
-					OutputStreamWriter out = new OutputStreamWriter(
-							new FileOutputStream(resultFileName.getAbsolutePath()), "UTF-8");
-
-					SBMLWriter writer = new SBMLWriter();
-					out.write(writer.writeSBMLToString(document));
-					out.close();
-			} else {
-				SBMLWriter writer = new SBMLWriter();
-				writer.writeSBMLToFile(document, resultFileName.getAbsolutePath());
-			}
 	}
 
 	/**
@@ -140,7 +103,7 @@ public class SpatialSimulatorHandler {
 		public static class optionList extends Structure implements Structure.ByValue{
 			
 			/** The Xdiv. */
-			public int Xdiv = 100;
+			public int Xdiv;
 			
 			/** The Ydiv. */
 			public int Ydiv;
@@ -164,7 +127,7 @@ public class SpatialSimulatorHandler {
 			public double range_min;
 			
 			/** The slice flag. */
-			public boolean sliceFlag = false;
+			public boolean sliceFlag;
 			
 			/** The slice. */
 			public int slice;		
@@ -175,12 +138,18 @@ public class SpatialSimulatorHandler {
 			/** The fname. */
 			public String fname;
 	
+			/** The doc flag. */
+			public boolean docFlag;
+			
+			/** The document. */
+			public String document;
+			
 			/* (non-Javadoc)
 			 * @see com.sun.jna.Structure#getFieldOrder()
 			 */
 			@Override
 			protected List<?> getFieldOrder() {
-				return Arrays.asList(new String[]{"Xdiv","Ydiv","Zdiv","end_time","dt","out_step","range_max","range_min","sliceFlag","slice","slicedim","fname"});
+				return Arrays.asList(new String[]{"Xdiv","Ydiv","Zdiv","end_time","dt","out_step","range_max","range_min","sliceFlag","slice","slicedim","fname", "docFlag", "document"});
 			}
 			
 		}
@@ -194,20 +163,5 @@ public class SpatialSimulatorHandler {
 		 * @param options the options
 		 */
 		public void spatialSimulator(optionList options);
-		//public void spatialSimulator( int Xdiv, int Ydiv, int Zdiv, double end_time, double dt, int out_step, double range_max, double range_min, boolean sliceFlag, int slice, char slicedim);
-		
-	}
-
-	public static void main(String[] args){
-		try {
-			SBMLDocument doc = SBMLReader.read(new File("sample/hogehoge.xml"));
-
-			System.setProperty("jna.library.path", "lib/darwin/");
-			SpatialSimulator spatialsim = SpatialSimulator.INSTANCE;
-		//	spatialsim.spatialSimulator(100, 100, 100, 100, 1, 10, 10, 0, false, 0, 'x');
-		} catch (XMLStreamException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 }
