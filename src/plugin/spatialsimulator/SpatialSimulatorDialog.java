@@ -292,7 +292,7 @@ public class SpatialSimulatorDialog extends JFrame implements ActionListener{
 		minColorField.setText("");
 		maxColorField.setText("");
 		sliceField.setText("");
-		sliceCombo.setSelectedIndex(0);
+		sliceCombo.setSelectedIndex(2);
 	}
 	
 	/**
@@ -404,10 +404,8 @@ public class SpatialSimulatorDialog extends JFrame implements ActionListener{
 			ssd.setDocument(document);
 			ssd.setVisible(true);
 		} catch (XMLStreamException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

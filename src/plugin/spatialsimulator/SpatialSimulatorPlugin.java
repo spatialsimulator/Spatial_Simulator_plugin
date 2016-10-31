@@ -35,7 +35,7 @@ public class SpatialSimulatorPlugin extends CellDesignerPlugin {
 	 */
 	@Override
 	public void SBaseAdded(PluginSBase arg0) {
-		//TODO check if this needs implementation 		
+		
 	}
 
 	/* (non-Javadoc)
@@ -43,7 +43,7 @@ public class SpatialSimulatorPlugin extends CellDesignerPlugin {
 	 */
 	@Override
 	public void SBaseChanged(PluginSBase arg0) {
-		//TODO check if this needs implementation 
+		
 	}
 
 	/* (non-Javadoc)
@@ -51,7 +51,7 @@ public class SpatialSimulatorPlugin extends CellDesignerPlugin {
 	 */
 	@Override
 	public void SBaseDeleted(PluginSBase arg0) {
-		//TODO check if this needs implementation 
+		
 	}
 
 	/* (non-Javadoc)
@@ -59,6 +59,7 @@ public class SpatialSimulatorPlugin extends CellDesignerPlugin {
 	 */
 	@Override
 	public void addPluginMenu() {
+		
 	}
 
 	/* (non-Javadoc)
@@ -66,6 +67,7 @@ public class SpatialSimulatorPlugin extends CellDesignerPlugin {
 	 */
 	@Override
 	public void modelClosed(PluginSBase arg0) {
+		
 	}
 
 	/* (non-Javadoc)
@@ -73,6 +75,7 @@ public class SpatialSimulatorPlugin extends CellDesignerPlugin {
 	 */
 	@Override
 	public void modelOpened(PluginSBase arg0) {
+		
 	}
 
 	/* (non-Javadoc)
@@ -80,6 +83,6 @@ public class SpatialSimulatorPlugin extends CellDesignerPlugin {
 	 */
 	@Override
 	public void modelSelectChanged(PluginSBase sbase) {
+	
 	}
-
 }

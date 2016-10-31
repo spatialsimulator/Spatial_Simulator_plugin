@@ -10,8 +10,8 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.1</version>
         <configuration>
-          <source>1.6</source>
-          <target>1.6</target>
+          <source>1.7</source>
+          <target>1.7</target>
         </configuration>
       </plugin>
       <plugin>
@@ -39,6 +39,10 @@
     </plugins>
   </build>
   <repositories>
+     <repository>
+      <id>lib</id>
+      <url>file://${basedir}/lib</url>
+    </repository>
     <repository>
       <id>ebi-repo</id>
       <name>The EBI repository</name>
@@ -70,6 +74,16 @@
     	<groupId>net.java.dev.jna</groupId>
     	<artifactId>jna-platform</artifactId>
     	<version>4.2.2</version>
+    </dependency>
+    <dependency>
+      <groupId>libspatialsimj</groupId>
+      <artifactId>libspatialsimj</artifactId>
+    	<version>1.0.0</version>
+    </dependency>
+    <dependency>
+      <groupId>jp.sbi</groupId>
+      <artifactId>celldesigner</artifactId>
+    	<version>1.0.0</version>
     </dependency>
   </dependencies>
 </project>

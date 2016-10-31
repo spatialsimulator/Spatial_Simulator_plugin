@@ -74,8 +74,7 @@ public class SpatialSimulatorHandler {
 	}
 
 	/**
-	 * void
-	 * TODO.
+	 * void.
 	 *
 	 * @param document the document
 	 * @param options the options
@@ -144,12 +143,15 @@ public class SpatialSimulatorHandler {
 			/** The document. */
 			public String document;
 			
+			/** The output flag. */
+			public boolean outputFlag;
+			
 			/* (non-Javadoc)
 			 * @see com.sun.jna.Structure#getFieldOrder()
 			 */
 			@Override
 			protected List<?> getFieldOrder() {
-				return Arrays.asList(new String[]{"Xdiv","Ydiv","Zdiv","end_time","dt","out_step","range_max","range_min","sliceFlag","slice","slicedim","fname", "docFlag", "document"});
+				return Arrays.asList(new String[]{"Xdiv","Ydiv","Zdiv","end_time","dt","out_step","range_max","range_min","sliceFlag","slice","slicedim","fname", "docFlag", "document", "outputFlag"});
 			}
 			
 		}
