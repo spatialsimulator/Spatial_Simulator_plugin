@@ -13,6 +13,7 @@ import java.awt.event.ComponentEvent;
 import java.io.IOException;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -111,6 +112,12 @@ public class SpatialSimulatorDialog extends JFrame implements ActionListener{
 	/** The slice field. */
 	private JTextField sliceField = new JTextField("0",defaultTextLength);
 	
+	/** The image label. */
+	private JLabel imageLabel = new JLabel("Output Image");
+	
+	/** The check box. */
+	private JCheckBox checkBox = new JCheckBox();
+	
 	/** The clear button. */
 	private JButton clearButton = new JButton("Clear");
 	
@@ -188,6 +195,10 @@ public class SpatialSimulatorDialog extends JFrame implements ActionListener{
 		sliceCombo.setSelectedItem(sliceAxis[2]);
 		panels.add(sliceCombo);
 		panels.add(sliceField);
+		JPanel panelI = new JPanel();
+		panelI.setLayout(new FlowLayout());
+		panelI.add(imageLabel);
+		panelI.add(checkBox);
 		
 		JPanel panel = new JPanel();
 		GridBagLayout layout = new GridBagLayout();
@@ -229,6 +240,10 @@ public class SpatialSimulatorDialog extends JFrame implements ActionListener{
 		gbc.gridy = 2;
 		layout.setConstraints(panels, gbc);
 		panel.add(panels);
+		gbc.gridx = 1;
+		gbc.gridy = 3;
+		layout.setConstraints(panelI, gbc);
+		panel.add(panelI);
 		
 		JPanel panel2 = new JPanel();
 		panel2.setLayout(new FlowLayout());
@@ -293,6 +308,7 @@ public class SpatialSimulatorDialog extends JFrame implements ActionListener{
 		maxColorField.setText("");
 		sliceField.setText("");
 		sliceCombo.setSelectedIndex(2);
+		checkBox.setSelected(false);
 	}
 	
 	/**
@@ -333,7 +349,8 @@ public class SpatialSimulatorDialog extends JFrame implements ActionListener{
 		options.out_step = Integer.parseInt(outputField.getText());
 		options.range_max = Double.parseDouble(maxColorField.getText());
 		options.range_min = Double.parseDouble(minColorField.getText());
-
+		options.outputFlag = checkBox.isSelected();
+		
 		if(isModel3d()){
 			options.slicedim = ((String) sliceCombo.getSelectedItem()).getBytes()[0];
 			options.slice = Integer.parseInt(sliceField.getText());
@@ -400,7 +417,6 @@ public class SpatialSimulatorDialog extends JFrame implements ActionListener{
 		SBMLDocument document;
 		try {
 			document = JSBML.readSBML("sample/alt.xml");
-			System.setProperty("jna.debug_load", "true");
 			ssd.setDocument(document);
 			ssd.setVisible(true);
 		} catch (XMLStreamException e) {

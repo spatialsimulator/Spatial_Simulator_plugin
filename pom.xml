@@ -7,6 +7,7 @@
     <sourceDirectory>src</sourceDirectory>
     <plugins>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.1</version>
         <configuration>
@@ -40,10 +41,10 @@
   </build>
   <repositories>
      <repository>
-      <id>lib</id>
+       <id>lib</id>
       <url>file://${basedir}/lib</url>
     </repository>
-    <repository>
+  <repository>
       <id>ebi-repo</id>
       <name>The EBI repository</name>
       <url>http://www.ebi.ac.uk/~maven/m2repo</url>
@@ -53,6 +54,7 @@
   <properties>
     <downloadSources>true</downloadSources>
     <downloadJavadocs>true</downloadJavadocs>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
   <dependencies>
     <dependency>
@@ -75,11 +77,13 @@
     	<artifactId>jna-platform</artifactId>
     	<version>4.2.2</version>
     </dependency>
-    <dependency>
+    <!--
+         <dependency>
       <groupId>libspatialsimj</groupId>
       <artifactId>libspatialsimj</artifactId>
     	<version>1.0.0</version>
     </dependency>
+-->
     <dependency>
       <groupId>jp.sbi</groupId>
       <artifactId>celldesigner</artifactId>

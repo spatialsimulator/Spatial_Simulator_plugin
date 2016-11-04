@@ -2,9 +2,9 @@ package plugin.spatialsimulator;
 
 import java.awt.event.ActionEvent;
 
+import javax.swing.JOptionPane;
 import javax.xml.stream.XMLStreamException;
 
-import jp.sbi.celldesigner.MessageDialog;
 import jp.sbi.celldesigner.plugin.PluginAction;
 import jp.sbi.celldesigner.plugin.PluginModel;
 
@@ -12,7 +12,6 @@ import org.sbml.jsbml.JSBML;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBMLException;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class SpatialSimulatorAction.
  *
@@ -54,13 +53,13 @@ public class SpatialSimulatorAction extends PluginAction {
 			simulatorDialog = new SpatialSimulatorDialog(document);
 			simulatorDialog.pack();
 			simulatorDialog.toFront();
-		//	simulatorDialog.setAlwaysOnTop(true);
+			simulatorDialog.setAlwaysOnTop(true);
 			simulatorDialog.setVisible(true);
 		} catch (XMLStreamException e) {
-			MessageDialog.showMessageDialog(null, "Error", "Error","Could not create SBML document from plugin model");
+			JOptionPane.showMessageDialog(null, "Invalid model", "Error",JOptionPane.ERROR_MESSAGE);
 			e.printStackTrace();
 		} catch(SBMLException e){
-			MessageDialog.showMessageDialog(null, "Error", "Error", "SBMLDocument missing Spatial attributes");
+			JOptionPane.showMessageDialog(null, "Invalid model", "Error",JOptionPane.ERROR_MESSAGE);
 			e.printStackTrace();
 		}
 		
