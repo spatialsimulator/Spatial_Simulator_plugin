@@ -18,7 +18,6 @@ import com.sun.jna.Platform;
 import com.sun.jna.Structure;
 
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class SpatialSimulator.
  *
@@ -39,7 +38,7 @@ public class SpatialSimulatorHandler {
 	 * Instantiates a new spatial simulator handler.
 	 */
 	private SpatialSimulatorHandler(){
-		
+		System.setProperty("jna.library.path", "darwin/");
 	}
 	
 	/**

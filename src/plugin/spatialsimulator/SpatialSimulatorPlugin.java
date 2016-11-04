@@ -6,6 +6,7 @@ import jp.sbi.celldesigner.plugin.PluginMenuItem;
 import jp.sbi.celldesigner.plugin.PluginSBase;
 
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class SpatialSimulatorPlugin.
  *
