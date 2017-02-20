@@ -1,0 +1,4 @@
+[submodule "thirdparty"]
+	path = thirdparty
+	url = https://github.com/spatialsimulator/Spatial_Simulator.git
+	branch = libHDF
