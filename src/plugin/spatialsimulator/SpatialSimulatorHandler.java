@@ -9,6 +9,7 @@ import javax.xml.stream.XMLStreamException;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBMLException;
 import org.sbml.jsbml.SBMLWriter;
+import org.sbml.jsbml.ext.spatial.SpatialConstants;
 
 import plugin.spatialsimulator.SpatialSimulatorHandler.SpatialSimulator.optionList;
 
@@ -22,25 +23,31 @@ import com.sun.jna.Structure;
  * The Class SpatialSimulator.
  *
  * @author Kaito Ii
- * 
+ *
  * Date Created: Jun 24, 2016
  */
 
 public class SpatialSimulatorHandler {
-	
+
 	/** The spatial simulator. */
 	private static SpatialSimulatorHandler spatialSimulator;
-	
+
 	/** The document. */
-	private SBMLDocument document;	
-	
+	private SBMLDocument document;
+
+	/** The simulator dialog. */
+	private SpatialSimulatorDialog simulatorDialog;
+
+	//private SimulationTextDialog textDialog;
+
 	/**
 	 * Instantiates a new spatial simulator handler.
 	 */
 	private SpatialSimulatorHandler(){
-		System.setProperty("jna.library.path", "darwin/");
+		System.setProperty("jna.library.path", "plugin/darwin/");
+		System.setProperty("jna.debug_load", "true");
 	}
-	
+
 	/**
 	 * Gets the single instance of SpatialSimulator.
 	 *
@@ -50,8 +57,23 @@ public class SpatialSimulatorHandler {
 		if(spatialSimulator == null){
 			spatialSimulator = new SpatialSimulatorHandler();
 		}
-		
+
 		return spatialSimulator;
+	}
+
+	/**
+	 *
+	 * void
+	 *
+	 */
+	public void showSimulatorDialog() {
+		if(simulatorDialog == null)
+			simulatorDialog = new SpatialSimulatorDialog();
+
+		simulatorDialog.setDocument(document);
+		simulatorDialog.pack();
+		simulatorDialog.toFront();
+		simulatorDialog.setVisible(true);
 	}
 
 	/**
@@ -70,6 +92,9 @@ public class SpatialSimulatorHandler {
 	 */
 	public void setDocument(SBMLDocument document) {
 		this.document = document;
+
+		if(!document.getPackageRequired(SpatialConstants.namespaceURI))
+			throw new SBMLException();
 	}
 
 	/**
@@ -86,65 +111,76 @@ public class SpatialSimulatorHandler {
 		options.fname = document.getModel().getId();
 		options.docFlag = true;
 		options.document = new SBMLWriter().writeSBMLToString(document);
+
+		simulatorDialog.setLock(true);
+		simulatorDialog.startProgressBar();
+//		textDialog = new SimulationTextDialog(simulatorDialog);
+//
+//		textDialog.clearTextArea();
+//		textDialog.setVisible(true);
 		SpatialSimulator spatialsim = SpatialSimulator.INSTANCE;
-		spatialsim.spatialSimulator(options);
+
+		spatialsim.simulate(options);
+
+		simulatorDialog.setLock(false);
+		simulatorDialog.stopProgressBar();
 	}
 
 	/**
 	 * The Interface SpatialSimulator.
 	 */
 	public interface SpatialSimulator extends Library {
-		
+
 		/**
 		 * The Class optionList.
 		 */
 		public static class optionList extends Structure implements Structure.ByValue{
-			
+
 			/** The Xdiv. */
 			public int Xdiv;
-			
+
 			/** The Ydiv. */
 			public int Ydiv;
-			
+
 			/** The Zdiv. */
 			public int Zdiv;
-			
+
 			/** The end time. */
 			public double end_time;
-			
+
 			/** The dt. */
 			public double dt;
-			
+
 			/** The out step. */
 			public int out_step;
-			
+
 			/** The range max. */
 			public double range_max;
-			
+
 			/** The range min. */
 			public double range_min;
-			
+
 			/** The slice flag. */
 			public boolean sliceFlag;
-			
+
 			/** The slice. */
-			public int slice;		
-			
+			public int slice;
+
 			/** The slicedim. */
 			public byte slicedim;
-			
+
 			/** The fname. */
 			public String fname;
-	
+
 			/** The doc flag. */
 			public boolean docFlag;
-			
+
 			/** The document. */
 			public String document;
-			
+
 			/** The output flag. */
 			public boolean outputFlag;
-			
+
 			/* (non-Javadoc)
 			 * @see com.sun.jna.Structure#getFieldOrder()
 			 */
@@ -152,17 +188,18 @@ public class SpatialSimulatorHandler {
 			protected List<?> getFieldOrder() {
 				return Arrays.asList(new String[]{"Xdiv","Ydiv","Zdiv","end_time","dt","out_step","range_max","range_min","sliceFlag","slice","slicedim","fname", "docFlag", "document", "outputFlag"});
 			}
-			
+
 		}
-		
+
 		/** The instance. */
 		public SpatialSimulator INSTANCE = (SpatialSimulator) Native.loadLibrary((Platform.isWindows() ? "msvcrt" : "spatialsim") , SpatialSimulator.class);
-	
+
 		/**
 		 * Spatial simulator.
 		 *
 		 * @param options the options
 		 */
-		public void spatialSimulator(optionList options);
+		public void simulate(optionList options);
 	}
+
 }

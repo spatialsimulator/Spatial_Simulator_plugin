@@ -3,14 +3,12 @@ package plugin.spatialsimulator;
 import java.awt.event.ActionEvent;
 
 import javax.swing.JOptionPane;
-import javax.xml.stream.XMLStreamException;
 
 import jp.sbi.celldesigner.plugin.PluginAction;
 import jp.sbi.celldesigner.plugin.PluginModel;
 
 import org.sbml.jsbml.JSBML;
 import org.sbml.jsbml.SBMLDocument;
-import org.sbml.jsbml.SBMLException;
 
 /**
  * The Class SpatialSimulatorAction.
@@ -26,10 +24,7 @@ public class SpatialSimulatorAction extends PluginAction {
 	private static final long serialVersionUID = -2321778927487000209L;
 
 	/** The plugin. */
-	SpatialSimulatorPlugin plugin;
-	
-	/** The simulator dialog. */
-	SpatialSimulatorDialog simulatorDialog;
+	private SpatialSimulatorPlugin plugin;
 	
 	/**
 	 * Instantiates a new spatial simulator action.
@@ -47,21 +42,17 @@ public class SpatialSimulatorAction extends PluginAction {
 	public void myActionPerformed(ActionEvent arg0) {
 		plugin.setStarted(true);
 		PluginModel pModel = plugin.getSelectedModel();
+
 		SBMLDocument document;
 		try {
 			document = JSBML.readSBMLFromString(pModel.getPureSBMLString());
-			simulatorDialog = new SpatialSimulatorDialog(document);
-			simulatorDialog.pack();
-			simulatorDialog.toFront();
-			simulatorDialog.setAlwaysOnTop(true);
-			simulatorDialog.setVisible(true);
-		} catch (XMLStreamException e) {
+			SpatialSimulatorHandler ssh = SpatialSimulatorHandler.getInstance();
+			ssh.setDocument(document);
+			ssh.showSimulatorDialog();
+		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Invalid model", "Error",JOptionPane.ERROR_MESSAGE);
 			e.printStackTrace();
-		} catch(SBMLException e){
-			JOptionPane.showMessageDialog(null, "Invalid model", "Error",JOptionPane.ERROR_MESSAGE);
-			e.printStackTrace();
-		}
+		} 
 		
 	}
 

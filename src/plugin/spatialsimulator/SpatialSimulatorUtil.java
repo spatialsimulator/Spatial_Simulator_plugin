@@ -1,4 +1,5 @@
 package plugin.spatialsimulator;
+
 // TODO: Auto-generated Javadoc
 
 /**
@@ -12,9 +13,5 @@ package plugin.spatialsimulator;
 public class SpatialSimulatorUtil {
 
 	/** The Constant title. */
-	public static final String title = "Spatial Simulator";
-	
-	
-	/** The Constant simulatorName. */
-	public static final String simulatorName = "";
+	public static final String title = "Spatial Simulator";	
 }
