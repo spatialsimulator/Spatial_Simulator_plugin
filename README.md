@@ -1,2 +1,2 @@
-# Spatial_Simulator_plugin
+# Spatial Simulator Plugin
 CellDesigner plugin for Spatial Simulator
