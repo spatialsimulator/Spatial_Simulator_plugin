@@ -1,4 +1,4 @@
-package plugin.spatialsimulator;
+package jp.ac.keio.bio.fun.plugin.spatialsimulator;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -6,12 +6,12 @@ import java.util.List;
 
 import javax.xml.stream.XMLStreamException;
 
+import jp.ac.keio.bio.fun.plugin.spatialsimulator.SpatialSimulatorHandler.SpatialSimulator.optionList;
+
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBMLException;
 import org.sbml.jsbml.SBMLWriter;
 import org.sbml.jsbml.ext.spatial.SpatialConstants;
-
-import plugin.spatialsimulator.SpatialSimulatorHandler.SpatialSimulator.optionList;
 
 import com.sun.jna.Library;
 import com.sun.jna.Native;
@@ -118,12 +118,15 @@ public class SpatialSimulatorHandler {
 //
 //		textDialog.clearTextArea();
 //		textDialog.setVisible(true);
-		SpatialSimulator spatialsim = SpatialSimulator.INSTANCE;
-
-		spatialsim.simulate(options);
-
-		simulatorDialog.setLock(false);
-		simulatorDialog.stopProgressBar();
+		try{
+			SpatialSimulator spatialsim = SpatialSimulator.INSTANCE;
+			spatialsim.simulate(options);
+		} catch (Exception e){
+			throw e;
+		} finally{
+			simulatorDialog.setLock(false);
+			simulatorDialog.stopProgressBar();			
+		}
 	}
 
 	/**

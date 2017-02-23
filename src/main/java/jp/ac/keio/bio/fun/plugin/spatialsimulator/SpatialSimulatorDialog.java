@@ -1,4 +1,4 @@
-package plugin.spatialsimulator;
+package jp.ac.keio.bio.fun.plugin.spatialsimulator;
 
 
 import java.awt.BorderLayout;
@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -20,13 +21,15 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JTextField;
+import javax.xml.stream.XMLStreamException;
 
+import jp.ac.keio.bio.fun.plugin.spatialsimulator.SpatialSimulatorHandler.SpatialSimulator.optionList;
+
+import org.sbml.jsbml.JSBML;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBMLException;
 import org.sbml.jsbml.ext.spatial.SpatialConstants;
 import org.sbml.jsbml.ext.spatial.SpatialModelPlugin;
-
-import plugin.spatialsimulator.SpatialSimulatorHandler.SpatialSimulator.optionList;
 
 
 // TODO: Auto-generated Javadoc
@@ -441,10 +444,32 @@ public class SpatialSimulatorDialog extends JDialog implements ActionListener{
 			try {
 				simulator.simulate(document, options);
 			} catch (Exception ex) {
+				ex.printStackTrace();
 				JOptionPane.showMessageDialog(null, "Unable to simulate");
 			}
 		}
 
 	}
 
+	/**
+	 * The main method.
+	 *
+	 * @param args
+	 *            the arguments
+	 */
+	public static void main(String[] args) {
+		SpatialSimulatorHandler ssh = SpatialSimulatorHandler.getInstance();
+		SBMLDocument document;
+		try {
+			document = JSBML.readSBML("sample/sam2d.xml");
+			System.setProperty("jna.debug_load", "true");
+			ssh.setDocument(document);
+			ssh.showSimulatorDialog();
+		} catch (XMLStreamException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 }
