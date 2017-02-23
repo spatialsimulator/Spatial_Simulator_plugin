@@ -1,4 +1,4 @@
-package plugin.spatialsimulator;
+package jp.ac.keio.bio.fun.plugin.spatialsimulator;
 
 import jp.sbi.celldesigner.plugin.CellDesignerPlugin;
 import jp.sbi.celldesigner.plugin.PluginMenu;

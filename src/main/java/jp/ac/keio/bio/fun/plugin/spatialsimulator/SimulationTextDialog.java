@@ -1,4 +1,4 @@
-package plugin.spatialsimulator;
+package jp.ac.keio.bio.fun.plugin.spatialsimulator;
 
 import java.awt.Dialog;
 import java.awt.Dimension;
