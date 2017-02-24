@@ -7,6 +7,7 @@ import java.util.List;
 import javax.xml.stream.XMLStreamException;
 
 import jp.ac.keio.bio.fun.plugin.spatialsimulator.SpatialSimulatorHandler.SpatialSimulator.optionList;
+import jp.sbi.celldesigner.Preference;
 
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBMLException;
@@ -19,6 +20,7 @@ import com.sun.jna.Platform;
 import com.sun.jna.Structure;
 
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class SpatialSimulator.
  *
@@ -39,6 +41,11 @@ public class SpatialSimulatorHandler {
 	private SpatialSimulatorDialog simulatorDialog;
 
 	//private SimulationTextDialog textDialog;
+	
+	/** The outpath. */
+	private static final String outpath = (Preference.JAVA_WEB_START_MODE) ? 
+			System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") + "CellDesignerSim"
+			: System.getProperty("user.home") + System.getProperty("file.separator") + "CellDesignerSim";
 
 	/**
 	 * Instantiates a new spatial simulator handler.
@@ -62,9 +69,7 @@ public class SpatialSimulatorHandler {
 	}
 
 	/**
-	 *
-	 * void
-	 *
+	 * void.
 	 */
 	public void showSimulatorDialog() {
 		if(simulatorDialog == null)
@@ -111,11 +116,11 @@ public class SpatialSimulatorHandler {
 		options.fname = document.getModel().getId();
 		options.docFlag = true;
 		options.document = new SBMLWriter().writeSBMLToString(document);
-
+		options.outpath = outpath;
+		
 		simulatorDialog.setLock(true);
 		simulatorDialog.startProgressBar();
 //		textDialog = new SimulationTextDialog(simulatorDialog);
-//
 //		textDialog.clearTextArea();
 //		textDialog.setVisible(true);
 		try{
@@ -183,13 +188,16 @@ public class SpatialSimulatorHandler {
 
 			/** The output flag. */
 			public boolean outputFlag;
+			
+			/** The outpath. */
+			public String outpath;
 
 			/* (non-Javadoc)
 			 * @see com.sun.jna.Structure#getFieldOrder()
 			 */
 			@Override
 			protected List<?> getFieldOrder() {
-				return Arrays.asList(new String[]{"Xdiv","Ydiv","Zdiv","end_time","dt","out_step","range_max","range_min","sliceFlag","slice","slicedim","fname", "docFlag", "document", "outputFlag"});
+				return Arrays.asList(new String[]{"Xdiv","Ydiv","Zdiv","end_time","dt","out_step","range_max","range_min","sliceFlag","slice","slicedim","fname", "docFlag", "document", "outputFlag", "outpath"});
 			}
 
 		}
