@@ -109,6 +109,11 @@
       <url>http://www.ebi.ac.uk/~maven/m2repo</url>
       <releases><enabled>true</enabled></releases>
     </repository>
+    <repository>
+      <id>JSBML-SNAPSHOT</id>
+      <name>The JSBML Snapshot repository</name>
+      <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+    </repository>
   </repositories>
 
   <properties>
