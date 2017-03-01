@@ -158,18 +158,23 @@
     <dependency>
       <groupId>jp.sbi</groupId>
       <artifactId>celldesigner</artifactId>
-      <version>1.0.0</version>
-      <scope>provided</scope>
+      <version>4.4.0</version>
+      <systemPath>${project.basedir}/thirdparty/celldesigner.jar</systemPath>
+      <scope>system</scope>
     </dependency>
+    <!--
     <dependency>
       <groupId>libsbml</groupId>
       <artifactId>sbmlj</artifactId>
       <version>1.0.0</version>
     </dependency>
+    -->
     <dependency>
       <groupId>spatialsim</groupId>
       <artifactId>libspatialsimj</artifactId>
-      <version>1.0.0</version>
+      <version>0.0.1</version>
+      <systemPath>${project.basedir}/thirdparty/spatialsimulator/libspatialsimj.jar</systemPath>
+      <scope>system</scope>
     </dependency>
   </dependencies>
 </project>
