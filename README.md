@@ -17,6 +17,6 @@ make
 cd ../../
 ./createjar.sh
 ```
-you will find `Spatial_Simulator_plugin/target/SpatialSimulatorPlugin-1.0.0-SNAPSHOT-jar-with-dependencies.jar` under `target/` directory.
+you will find `SpatialSimulatorPlugin-1.0.0-SNAPSHOT-jar-with-dependencies.jar` under `target/` directory.
 
 Have fun!
