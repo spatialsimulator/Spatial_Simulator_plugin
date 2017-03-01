@@ -137,7 +137,8 @@ public class SpatialSimulatorHandler {
 	/**
 	 * The Interface SpatialSimulator.
 	 */
-	public interface SpatialSimulator extends Library {
+  //import com.sun.jna.Library;
+	public interface SpatialSimulator extends com.sun.jna.Library {
 
 		/**
 		 * The Class optionList.
