@@ -41,9 +41,9 @@ public class SpatialSimulatorHandler {
 	private SpatialSimulatorDialog simulatorDialog;
 
 	//private SimulationTextDialog textDialog;
-	
+
 	/** The outpath. */
-	private static final String outpath = (Preference.JAVA_WEB_START_MODE) ? 
+	private static final String outpath = (Preference.JAVA_WEB_START_MODE) ?
 			System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") + "CellDesignerSim"
 			: System.getProperty("user.home") + System.getProperty("file.separator") + "CellDesignerSim";
 
@@ -117,7 +117,7 @@ public class SpatialSimulatorHandler {
 		options.docFlag = true;
 		options.document = new SBMLWriter().writeSBMLToString(document);
 		options.outpath = outpath;
-		
+
 		simulatorDialog.setLock(true);
 		simulatorDialog.startProgressBar();
 //		textDialog = new SimulationTextDialog(simulatorDialog);
@@ -130,14 +130,15 @@ public class SpatialSimulatorHandler {
 			throw e;
 		} finally{
 			simulatorDialog.setLock(false);
-			simulatorDialog.stopProgressBar();			
+			simulatorDialog.stopProgressBar();
 		}
 	}
 
 	/**
 	 * The Interface SpatialSimulator.
 	 */
-	public interface SpatialSimulator extends Library {
+  //import com.sun.jna.Library;
+	public interface SpatialSimulator extends com.sun.jna.Library {
 
 		/**
 		 * The Class optionList.
@@ -188,7 +189,7 @@ public class SpatialSimulatorHandler {
 
 			/** The output flag. */
 			public boolean outputFlag;
-			
+
 			/** The outpath. */
 			public String outpath;
 
